@@ -3,37 +3,37 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
-import DropDown, { VibeType } from "../components/DropDown";
+import DropDown, { StudentType } from "../components/DropDown";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import LoadingDots from "../components/LoadingDots";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
-  const [bio, setBio] = useState("");
-  const [vibe, setVibe] = useState<VibeType>("Incoming");
-  const [generatedBios, setGeneratedBios] = useState<String>("");
+  const [question, setAnswer] = useState("");
+  const [student, setStudent] = useState<StudentType>("Incoming");
+  const [generatedAnswers, setGeneratedAnswers] = useState<String>("");
 
-  const bioRef = useRef<null | HTMLDivElement>(null);
+  const questionRef = useRef<null | HTMLDivElement>(null);
 
-  const scrollToBios = () => {
-    if (bioRef.current !== null) {
-      bioRef.current.scrollIntoView({ behavior: "smooth" });
+  const scrollToAnswers = () => {
+    if (questionRef.current !== null) {
+      questionRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  const prompt = `Generate a factually correct answer for a ${vibe} student at UCLA. Answer precisely and clearly labeled answers as "1." and "2.". ${
-    vibe === "Transfer"
-      ? "Make sure the answers are relavent for a transfering UCLA student."
+  const prompt = `Generate a factually correct answer for a ${student} student at UCLA. Answer precisely and clearly labeled answers as "1." and "2.". ${
+    student === "Transfer"
+      ? "Make sure the answers are relavent for a transfering UCLA student. Include some specific information about transfer students."
       : null
   }
-      Make sure each generated answer is less than 160 characters, has factual information found from UCLA sites. ${bio}${
-    bio.slice(-1) === "." ? "" : "."
+      Make sure each generated answer is less than 160 characters, has factual information found from UCLA sites. ${question}${
+    question.slice(-1) === "." ? "" : "."
   }`;
 
-  const generateBio = async (e: any) => {
+  const generateAnswer = async (e: any) => {
     e.preventDefault();
-    setGeneratedBios("");
+    setGeneratedAnswers("");
     setLoading(true);
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -63,9 +63,9 @@ const Home: NextPage = () => {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
+      setGeneratedAnswers((prev) => prev + chunkValue);
     }
-    scrollToBios();
+    scrollToAnswers();
     setLoading(false);
   };
 
@@ -81,7 +81,7 @@ const Home: NextPage = () => {
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
           Answer all your questions about UCLA
         </h1>
-        <p className="text-slate-500 mt-5"> 149 questions answered so far.</p>
+        <p className="text-slate-500 mt-5"> 14 questions answered so far.</p>
         <div className="max-w-xl w-full">
           <div className="flex mt-10 items-center space-x-3">
             <Image
@@ -100,8 +100,8 @@ const Home: NextPage = () => {
             </p>
           </div>
           <textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
+            value={question}
+            onChange={(e) => setAnswer(e.target.value)}
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
@@ -113,13 +113,13 @@ const Home: NextPage = () => {
             <p className="text-left font-medium">Select student type.</p>
           </div>
           <div className="block">
-            <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
+            <DropDown student={student} setStudent={(newStudent) => setStudent(newStudent)} />
           </div>
 
           {!loading && (
             <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              onClick={(e) => generateBio(e)}
+              onClick={(e) => generateAnswer(e)}
             >
               Ask your question &rarr;
             </button>
@@ -140,33 +140,33 @@ const Home: NextPage = () => {
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <div className="space-y-10 my-10">
-          {generatedBios && (
+          {generatedAnswers && (
             <>
               <div>
                 <h2
                   className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                  ref={bioRef}
+                  ref={questionRef}
                 >
-                  bruinBot Answers:
+                  bruinBot Answer:
                 </h2>
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                {generatedBios
-                  .substring(generatedBios.indexOf("1") + 3)
+                {generatedAnswers
+                  .substring(generatedAnswers.indexOf("1") + 3)
                   .split("2.")
-                  .map((generatedBio) => {
+                  .map((generatedAnswer) => {
                     return (
                       <div
                         className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                         onClick={() => {
-                          navigator.clipboard.writeText(generatedBio);
+                          navigator.clipboard.writeText(generatedAnswer);
                           toast("Answer copied to clipboard", {
                             icon: "✂️",
                           });
                         }}
-                        key={generatedBio}
+                        key={generatedAnswer}
                       >
-                        <p>{generatedBio}</p>
+                        <p>{generatedAnswer}</p>
                       </div>
                     );
                   })}
