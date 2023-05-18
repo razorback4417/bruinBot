@@ -22,7 +22,7 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `Generate a factually correct answer for a ${student} student at UCLA. Answer precisely and clearly labeled answers as "1." and "2.". ${
+  const prompt = `Generate a factually correct answer for a ${student} student at UCLA. First, research information from the official UCLA site. Then try to find relavent information from students on social media. Finally, answer precisely and clearly labeled answers as "1." and "2.". ${
     student === "Transfer"
       ? "Make sure the answers are relavent for a transfering UCLA student. Include some specific information about transfer students."
       : null

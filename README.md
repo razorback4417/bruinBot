@@ -1,4 +1,4 @@
-# [bruinBot](https://www.google.com)
+# [bruinBot](https://bruin-bot.vercel.app/)
 
 This project answers your questions about UCLA using AI.
 
