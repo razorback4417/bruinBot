@@ -105,7 +105,7 @@ const Home: NextPage = () => {
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              "e.g. What are the best dining halls at UCLA? What are clubs dealing with Asian culture? "
+              "e.g. What are the best dining halls for dinner at UCLA?"
             }
           />
           <div className="flex mb-5 items-center space-x-3">
