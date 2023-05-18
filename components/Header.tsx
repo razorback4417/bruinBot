@@ -13,8 +13,9 @@ export default function Header() {
           height={32}
         />
         <h1 className="sm:text-4xl text-2xl font-bold ml-2 tracking-tight">
-          bruinBot
+          bruin<span className="text-ucla-blue">Bot</span>
         </h1>
+
       </Link>
       <a
         href="https://vercel.com/"
